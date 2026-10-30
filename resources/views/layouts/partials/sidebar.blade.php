@@ -1,4 +1,4 @@
-<aside class="sticky top-0 flex w-[281px] shrink-0 flex-col bg-[#071E49]">
+<aside class="sticky top-0 self-start flex h-screen w-[281px] shrink-0 flex-col overflow-y-auto bg-[#071E49]">
 
     {{-- Logo --}}
     <div class="px-[27px] pt-[43px] font-poppins">
@@ -13,9 +13,9 @@
         ['label' => 'Bahan Pangan', 'route' => 'bahan.index'],
         ['label' => 'Barang Masuk', 'route' => 'barang-masuk.index'],
         ['label' => 'Barang Keluar', 'route' => 'barang-keluar.index'],
-        ['label' => 'Stok Opname', 'route' => null],
-        ['label' => 'Laporan', 'route' => null],
-        ['label' => 'Pengguna', 'route' => null],
+        ['label' => 'Stok Opname', 'route' => 'stok-opname.index'],
+        ['label' => 'Laporan', 'route' => 'laporan.index'],
+        ['label' => 'Pengguna', 'route' => 'pengguna.index'],
     ];
     @endphp
 

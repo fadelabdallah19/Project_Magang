@@ -6,6 +6,8 @@ use App\Http\Controllers\BahanController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\StokOpnameController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PenggunaController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -23,7 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/barang-keluar', [BarangKeluarController::class, 'index'])->name('barang-keluar.index');
     Route::post('/barang-keluar', [BarangKeluarController::class, 'store'])->name('barang-keluar.store');
     Route::get('/stok-opname', [StokOpnameController::class, 'index'])->name('stok-opname.index');
-    Route::get('/stok-opname', [StokOpnameController::class, 'store'])->name('stok-opname.store');
+    Route::post('/stok-opname', [StokOpnameController::class, 'store'])->name('stok-opname.store');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
 });
 
 Route::post('/logout', [LoginController::class, 'destroy'])
