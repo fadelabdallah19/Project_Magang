@@ -10,12 +10,6 @@
             <h1 class="text-[25px] leading-[30.3px] font-bold text-black">Dashboard Stok</h1>
             <p class="mt-[4px] text-[15px] leading-[18.2px] text-[#959595]">Ringkasan kondisi bahan pangan &amp; aktivitas persediaan.</p>
         </div>
-
-        <div class="mt-[40px] flex gap-3 pr-[27px]">
-            <button type="button" class="h-8 w-[100px] rounded-[10px] border border-[#E5E7EB] bg-white text-[12px] font-bold text-[#787878]">Admin</button>
-            <button type="button" class="h-8 w-[100px] rounded-[10px] border border-[#E5E7EB] bg-white text-[12px] font-bold text-[#787878]">Gudang</button>
-            <button type="button" class="h-8 w-[100px] rounded-[10px] border border-[#E5E7EB] bg-white text-[12px] font-bold text-[#787878]">Pengawas</button>
-        </div>
     </div>
 
     {{-- Kartu Statistik --}}
