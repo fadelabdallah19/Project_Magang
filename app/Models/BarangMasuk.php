@@ -31,6 +31,6 @@ class BarangMasuk extends Model
 
     public function bahan(): BelongsTo
     {
-        return $this->belongTo(Bahan::class, 'bahan_id');
+        return $this->belongsTo(Bahan::class, 'bahan_id');
     }
 }

@@ -1,79 +1,185 @@
 @extends('layouts.app')
 
-@section('title', 'Data Bahan Pangan - MBG Smart Stock')
+@section('title', 'Manajemen Bahan Pangan - MBG Smart Stock')
 
 @section('content')
-    <div class="flex items-start justify-between">
+    @php
+        $kategoriList = $bahan->pluck('kategori')->unique()->sort()->values();
+        $stokMinimum = \App\Models\Bahan::STOCK_MINIMUM;
+    @endphp
+
+    {{-- Judul halaman --}}
+    {{-- <div class="flex items-start justify-between">
         <div>
-            <h1 class="text-[25px] leading-[30.3px] font-bold text-black">Data Bahan Pangan</h1>
-            <p class="mt-[4px] text-[15px] leading-[18.2px] text-[#959595]">Inventaris Persediaan Pangan</p>
+            <h1 class="text-[20px] leading-[1.3] font-bold tracking-[-0.025em] text-[#182230]">
+                Manajemen Bahan Pangan
+            </h1>
+            <p class="mt-[3px] text-[11px] text-[#6D7B90]">
+                Kelola data master bahan makanan, kategori, dan batas minimum
+            </p>
+        </div>
+    </div> --}}
+
+    @if (session('success'))
+        <div class="mt-4 rounded-[10px] border border-[#B7E4CD] bg-[#EDF7F1] px-4 py-3 text-[11px] font-semibold text-[#257A59]">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="mt-4 rounded-[10px] border border-[#F3C7C7] bg-[#FFF0F0] px-4 py-3 text-[11px] font-semibold text-[#D94E4E]">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    {{-- Kartu daftar bahan --}}
+    <section class="mt-6 overflow-hidden rounded-[15px] border border-[#D9E1EB] bg-white shadow-[0_2px_5px_rgba(28,47,74,0.03)]">
+
+        {{-- Header kartu --}}
+        <div class="flex min-h-[90px] items-center justify-between gap-[18px] px-[26px] pt-[22px] pb-[16px] max-[800px]:px-[18px] max-[560px]:min-h-0 max-[560px]:flex-col max-[560px]:items-start max-[560px]:p-[19px_16px]">
+            <div>
+                <p class="text-[17px] font-bold tracking-[-0.025em] text-[#182230]">
+                    Daftar Bahan Pangan
+                </p>
+                <p class="mt-[5px] text-[14px] leading-[1.45] text-[#6D7B90]">
+                    Kelola master data bahan baku untuk kebutuhan produksi makanan bergizi
+                </p>
+            </div>
+
+            <button type="button" data-modal-open class="inline-flex h-[42px] items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2] max-[560px]:w-full">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5v14"></path>
+                </svg>
+                Tambah Bahan
+            </button>
         </div>
 
-        <button type="button" data-modal-open class="mt-[22px] inline-flex h-[30px] cursor-pointer items-center gap-[6px] rounded-[5px] bg-[#0088FF] px-[13px] font-poppins text-[15px] leading-[22.5px] font-normal text-white hover:bg-[#0077E6]">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8.00016 3.33333V8M8.00016 8V12.6667M8.00016 8H3.3335M8.00016 8H12.6668"
-                stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Tambah Bahan Pangan
-        </button>
-    </div>
+        {{-- Search & filter --}}
+        <div class="flex gap-[15px] px-[26px] pt-[5px] pb-[24px] max-[800px]:px-[18px] max-[560px]:flex-col max-[560px]:items-stretch max-[560px]:px-4 max-[560px]:pb-[18px]">
+            <label class="flex h-[45px] min-w-0 flex-1 items-center gap-[11px] rounded-[9px] border border-[#D9E1EB] bg-[#F7F9FC] px-[14px] text-[#6D7B90] focus-within:border-[#86AFE6] focus-within:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m21 21-4.34-4.34"></path>
+                    <circle cx="11" cy="11" r="8"></circle>
+                </svg>
 
-    {{-- Tabel --}}
-    <div class="mt-[46px] overflow-hidden rounded-[15px] bg-white pb-1 shadow-[5px_5px_5px_rgba(0,0,0,0.25)]">
-        <table class="w-full table-fixed font-poppins">
-            <thead>
-                <tr class="h-[47px] bg-[#E5E7EB] text-left text-[15px] leading-[22.5px] font-bold text-[#787878]">
-                    <th class="w-[163px] pl-[31px] font-bold">Kode</th>
-                    <th class="w-[202px] font-bold">Nama Bahan</th>
-                    <th class="w-[179px] font-bold">Kategori</th>
-                    <th class="w-[113px] font-bold">Stok</th>
-                    <th class="w-[136px] font-bold">Satuan</th>
-                    <th class="w-[137px] text-center font-bold">Status</th>
-                    <th class="w-[120px] text-center font-bold">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($bahan as $item)
-                    <tr class="h-[57px] text-[15px] leading-[22.5px]">
-                        <td class="pl-[31px] font-normal text-[#787878]">{{ $item['kode']}}</td>
-                        <td class="font-bold text-[#787878]">{{ $item['nama']}}</td>
-                        <td class="font-bold text-[#787878]">{{ $item['kategori']}}</td>
-                        <td class="font-bold {{ $item['status'] === 'Stok Rendah' ? 'text-[#E11D48]' : 'text-[#787878]'}}">{{ $item['stok']}}</td>
-                        <td class="font-bold text-[#787878]">{{ $item['satuan']}}</td>
-                        <td class="text-center">
-                            <span class="inline-flex h-8 w-[120px] items-center justify-center rounded-[10px] font-bold {{ $item['status'] === 'Stok Rendah' ? 'bg-[#FFF1F2] text-[#E11D48]' : 'bg-[#ECFDF5] text-[#059669]'}}">{{ $item['status']}}</span></td>
-                        <td>
-                            <div class="flex items-center justify-center gap-[14px]">
-                                {{-- Tombol Edit --}}
-                                  <button type="button"
-                                    data-modal-edit
-                                    data-kode="{{ $item['kode'] }}"
-                                    data-nama="{{ $item['nama'] }}"
-                                    data-kategori="{{ $item['kategori'] }}"
-                                    data-stok="{{ $item['stok'] }}"
-                                    data-satuan="{{ $item['satuan'] }}"
-                                    title="Edit {{ $item['nama'] }}"
-                                    aria-label="Edit {{ $item['nama'] }}"
-                                    class="cursor-pointer">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4.16699 15.8331H7.84533L19.2145 4.46396C19.7015 3.97577 19.975 3.31436 19.975 2.6248C19.975 1.93523 19.7015 1.27382 19.2145 0.785629C18.7192 0.312207 18.0605 0.0480042 17.3753 0.0480042C16.6902 0.0480042 16.0314 0.312207 15.5362 0.785629L4.16699 12.1548V15.8331ZM5.83366 12.8448L16.7145 1.96396C16.8925 1.79393 17.1292 1.69904 17.3753 1.69904C17.6215 1.69904 17.8582 1.79393 18.0362 1.96396C18.2111 2.13939 18.3094 2.37704 18.3094 2.6248C18.3094 2.87255 18.2111 3.1102 18.0362 3.28563L7.15533 14.1665H5.83366V12.8448Z" fill="#0088FF"/>
-                                        <path d="M19.6842 6.35167L18.3333 7.7025V13.3333H13.3333V18.3333H1.66667V2.5C1.66667 2.27899 1.75446 2.06702 1.91074 1.91074C2.06702 1.75446 2.27899 1.66667 2.5 1.66667H12.2983L13.6492 0.315833C13.7708 0.20302 13.8991 0.0975551 14.0333 0L2.5 0C1.83696 0 1.20107 0.263392 0.732233 0.732233C0.263392 1.20107 0 1.83696 0 2.5L0 20H15.345L20 15.345V5.9675C19.9022 6.10155 19.7968 6.22982 19.6842 6.35167V6.35167ZM15 17.9883V15H17.9883L15 17.9883Z" fill="#0088FF"/>
-                                    </svg>
-                                </button>
+                <input id="bahan-search" type="search" placeholder="Cari berdasarkan nama atau kode bahan..." aria-label="Cari bahan pangan" class="min-w-0 flex-1 bg-transparent text-[14px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
+            </label>
 
-                                {{--Tombol Hapus--}}
-                                <button type="button" tittle="Hapus {{ $item['nama'] }}" aria-label="Hapus {{ $item['nama'] }}" class="cursor-pointer">
-                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.5 5H4.16667M4.16667 5H17.5M4.16667 5L4.16667 16.6667C4.16667 17.1087 4.34226 17.5326 4.65482 17.8452C4.96738 18.1577 5.39131 18.3333 5.83333 18.3333H14.1667C14.6087 18.3333 15.0326 18.1577 15.3452 17.8452C15.6577 17.5326 15.8333 17.1087 15.8333 16.6667V5.00001M6.66667 5.00001V3.33334C6.66667 2.89131 6.84226 2.46739 7.15482 2.15483C7.46738 1.84227 7.89131 1.66667 8.33333 1.66667H11.6667C12.1087 1.66667 12.5326 1.84227 12.8452 2.15483C13.1577 2.46739 13.3333 2.89131 13.3333 3.33334V5.00001M8.33333 9.16667V14.1667M11.6667 9.16667V14.1667" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
+            <label class="relative flex h-[45px] w-[180px] items-center rounded-[9px] border border-[#D9E1EB] bg-white px-[13px] text-[#182230] focus-within:border-[#86AFE6] focus-within:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] max-[560px]:w-full">
+                <select id="bahan-kategori" aria-label="Filter kategori"
+                    class="h-full w-full appearance-none bg-transparent pr-5 text-[14px] outline-none">
+                    <option>Semua Kategori</option>
+                    @foreach ($kategoriList as $kategori)
+                        <option>{{ $kategori }}</option>
+                    @endforeach
+                </select>
+
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none absolute right-3" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6"></path>
+                </svg>
+            </label>
+        </div>
+
+        {{-- Tabel --}}
+        <div class="mx-[26px] mb-[26px] overflow-x-auto rounded-[12px] border border-[#D9E1EB] max-[800px]:mx-[18px] max-[560px]:mx-4 max-[560px]:mb-4">
+            <table class="w-full min-w-[930px] border-collapse">
+                <thead>
+                    <tr>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Kode Bahan</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Nama Bahan</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Kategori</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Satuan</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-right text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Stok Tersedia</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-right text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Stok Minimum</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Status</th>
+                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Aksi</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                </thead>
+
+                <tbody>
+                    @forelse ($bahan as $item)
+                        @php
+                            $stokRendahItem = $item->stok <= $stokMinimum;
+                        @endphp
+
+                        <tr data-bahan-row data-kode="{{ strtolower($item->kode) }}" data-nama="{{ strtolower($item->nama) }}" data-kategori="{{ $item->kategori }}">
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] font-semibold whitespace-nowrap text-[#2677DF]">{{ $item->kode }}</td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] font-bold whitespace-nowrap">{{ $item->nama }}</td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap text-[#6D7B90]">{{ $item->kategori }}</td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] text-center whitespace-nowrap">{{ $item->satuan }}</td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] font-bold whitespace-nowrap text-center">{{ number_format($item->stok, 0, ',', '.') }}</td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap text-center text-[#6D7B90]">{{ number_format($stokMinimum, 0, ',', '.') }}</td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-center text-[12px] whitespace-nowrap">
+                                <span class="inline-flex min-h-[23px] items-center rounded-full px-[10px] py-[3px] text-[9px] font-semibold whitespace-nowrap {{ $stokRendahItem ? 'bg-[#FFF0F0] text-[#D94E4E]' : 'bg-[#EDF7F1] text-[#257A59]' }}">
+                                    {{ $stokRendahItem ? 'Stok Rendah' : 'Aman' }}
+                                </span>
+                            </td>
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-[9px]">
+                                    <button type="button" data-modal-edit data-kode="{{ $item->kode }}" data-nama="{{ $item->nama }}" data-kategori="{{ $item->kategori }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}" title="Edit {{ $item->nama }}" aria-label="Edit {{ $item->nama }}" class="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-[8px] bg-[#EDF4FF] text-[#2D76D6] transition-transform hover:-translate-y-px" >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+                                            <path d="m15 5 4 4"></path>
+                                        </svg>
+                                    </button>
+
+                                    <form method="POST" action="{{ route('bahan.destroy', $item->kode) }}" onsubmit="return confirm('Hapus bahan pangan ini?')" class="shrink-0">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" title="Hapus {{ $item->nama }}" aria-label="Hapus {{ $item->nama }}" class="grid h-[34px] w-[34px] place-items-center rounded-[8px] bg-[#FFF0F0] text-[#D94E4E] transition-transform hover:-translate-y-px">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M10 11v6"></path>
+                                                <path d="M14 11v6"></path>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                                <path d="M3 6h18"></path>
+                                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="h-[220px] border-t border-[#D9E1EB] px-5 text-center">
+                                <div class="grid min-h-[220px] place-items-center text-[#98A4B4]">
+                                    <div>
+                                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="mx-auto" aria-hidden="true">
+                                            <path d="m7.5 4.27 9 5.15"></path>
+                                            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+                                            <path d="m3.3 7 8.7 5 8.7-5"></path>
+                                            <path d="M12 22V12"></path>
+                                        </svg>
+                                        <p class="mt-3 text-[12px] font-semibold text-[#182230]">Belum ada data bahan pangan</p>
+                                        <span class="mt-[5px] block text-[10px]">Tambahkan bahan pangan untuk mulai mengelola persediaan.</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+
+                    @if ($bahan->isNotEmpty())
+                        <tr id="bahan-filter-empty" class="hidden">
+                            <td colspan="8" class="h-[220px] border-t border-[#D9E1EB] px-5 text-center">
+                                <div class="grid min-h-[220px] place-items-center text-[#98A4B4]">
+                                    <div>
+                                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="mx-auto" aria-hidden="true">
+                                            <path d="m21 21-4.34-4.34"></path>
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                        </svg>
+                                        <p class="mt-3 text-[12px] font-semibold text-[#182230]">Data bahan tidak ditemukan</p>
+                                        <span class="mt-[5px] block text-[10px]">Coba gunakan kata kunci atau kategori lain.</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </section>
 
     {{-- Tambah Bahan Pangan --}}
     <div id="modal-tambah" data-modal data-open-on-error="{{ $errors->any() && old('_modal') === 'tambah' ? 'true' : 'false' }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-white/10 p-4 backdrop-blur-[3px]">

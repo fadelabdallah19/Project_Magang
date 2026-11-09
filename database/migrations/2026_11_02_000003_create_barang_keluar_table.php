@@ -15,7 +15,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->unsignedInteger('jumlah');
             $table->string('satuan', 20);
-            $table->string('supplier', 100)->nullable;
+            $table->string('supplier', 100)->nullable();
             $table->timestamps();
         });
     }

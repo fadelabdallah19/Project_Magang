@@ -12,7 +12,7 @@ class Bahan extends Model
 
     protected $table = 'bahan';
 
-    public const STOK_MINIMUM = 20;
+    public const STOCK_MINIMUM = 20;
 
     protected $fillable = [
         'kode',
@@ -46,6 +46,6 @@ class Bahan extends Model
 
     public function getStatusAttribute(): string
     {
-        return $this->stok <= self::STOK_MINIMUM ? 'Stok Rendah' : 'Aman';
+        return $this->stok <= self::STOCK_MINIMUM ? 'Stok Rendah' : 'Aman';
     }
 }

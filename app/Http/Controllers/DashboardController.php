@@ -2,26 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bahan;
+use App\Models\BarangKeluar;
+use App\Models\BarangMasuk;
+use App\Models\StokOpname;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function index(): View
     {
-        //Data Dummy
-        $bahan =[
-            ['kode' => 'MBG-001', 'nama' => 'Beras', 'stok' => 120, 'satuan' => 'Kg', 'status' => 'Aman'],
-            ['kode' => 'MBG-002', 'nama' => 'Daging Ayam Fresh', 'stok' => 50, 'satuan' => 'Kg', 'status' => 'Aman'],
-            ['kode' => 'MBG-003', 'nama' => 'Kentang', 'stok' => 15, 'satuan' => 'Kg', 'status' => 'Stok Rendah'],
-            ['kode' => 'MBG-005', 'nama' => 'Tempe', 'stok' => 8, 'satuan' => 'Kg', 'status' => 'Stok Rendah'],
-            ['kode' => 'MBG-004', 'nama' => 'Kecap Manis', 'stok' => 70, 'satuan' => 'Liter', 'status' => 'Aman'],
-        ];
+        $bahan = Bahan::orderBy('kode')->get();
+        $totalBahan = Bahan::count();
+        $stokRendah = Bahan::where('stok', '<=', Bahan::STOCK_MINIMUM)->count();
+        $penerimaanHariIni = BarangMasuk::whereDate('tanggal', today())->count();
+        $pengeluaranHariIni = BarangKeluar::whereDate('tanggal', today())->count();
+        $aktivitas = $this->aktivitasTerakhir();
 
-        return view('dashboard', [
-            'totalBahan' => 5,
-            'stokRendah' => 3,
-            'transaksiHariIni' => 2,
-            'bahan' => $bahan,
-        ]);
+        return view('dashboard', compact(
+            'bahan',
+            'totalBahan',
+            'stokRendah',
+            'penerimaanHariIni',
+            'pengeluaranHariIni',
+            'aktivitas',
+        ));
+    }
+
+    private function aktivitasTerakhir(): Collection
+    {
+        $masuk = BarangMasuk::with('bahan')
+            ->latest('created_at')
+            ->take(3)
+            ->get()
+            ->map(fn ($item) => [
+                'judul' => 'Penerimaan ' . $item->bahan->nama,
+                'deskripsi' => $item->supplier
+                    ? $item->supplier . ' mengirim pasokan.'
+                    : $item->jumlah . ' ' . $item->satuan . ' diterima.',
+                'waktu' => $item->created_at,
+                'ikon' => 'masuk',
+            ]);
+
+        $keluar = BarangKeluar::with('bahan')
+            ->latest('created_at')
+            ->take(3)
+            ->get()
+            ->map(fn ($item) => [
+                'judul' => 'Pengeluaran ' . $item->bahan->nama,
+                'deskripsi' => $item->jumlah . ' ' . $item->satuan . ' dikeluarkan dari gudang.',
+                'waktu' => $item->created_at,
+                'ikon' => 'keluar',
+            ]);
+
+        $opname = StokOpname::with('bahan')
+            ->latest('created_at')
+            ->take(3)
+            ->get()
+            ->map(fn ($item) => [
+                'judul' => 'Stok Opname ' . $item->bahan->nama,
+                'deskripsi' => $item->keterangan ?: 'Penyesuaian fisik gudang utama.',
+                'waktu' => $item->created_at,
+                'ikon' => 'opname',
+            ]);
+
+        return $masuk
+            ->concat($keluar)
+            ->concat($opname)
+            ->sortByDesc('waktu')
+            ->take(3)
+            ->values();
     }
 }

@@ -15,11 +15,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $akun = [
+            ['name' => 'Administrator', 'username' => 'admin.mbg', 'email' => 'admin@mbg.test', 'role' => 'Admin'],
+            ['name' => 'Petugas Gudang', 'username' => 'petugas.gudang', 'email' => 'gudang@mbg.test', 'role' => 'Petugas Gudang'],
+            ['name' => 'Pimpinan', 'username' => 'pimpinan', 'email' => 'pimpinan@mbg.test', 'role' => 'Pengawas'],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        foreach ($akun as $item) {
+            User::updateOrCreate(
+                ['username' => $item['username']],
+                [...$item, 'status' => 'Aktif', 'password' => 'password'],
+            );
+        }
+
+        // Akun lama
+        User::where('username', 'admin')->update([
+            'role' => 'Admin',
+            'status' => 'Aktif',
         ]);
+
+        $this->call(BahanSeeder::class);
     }
 }

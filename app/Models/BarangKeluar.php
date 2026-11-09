@@ -28,4 +28,9 @@ class BarangKeluar extends Model
             'jumlah' => 'integer',
         ];
     }
+
+    public function bahan(): BelongsTo
+    {
+        return $this->belongsTo(Bahan::class, 'bahan_id');
+    }
 }

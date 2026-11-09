@@ -1,119 +1,232 @@
 @extends('layouts.app')
 
-@section('title', 'Barang Keluar - MBG Smart Stock')
+@section('title', 'Pengeluaran Bahan - MBG Smart Stock')
 
 @section('content')
-    {{-- Judul Halaman --}}
-    <div>
-        <h1 class="text-[25px] leading-[30.3px] font-bold text-black">Pengeluaran Stok (Barang Keluar)</h1>
-        <p class="mt-[4px] text-[15px] leading-[18.2px] text-[#959595]">Catat pemakaian atau distribusi bahan pangan</p>
-    </div>
+    {{-- Judul halaman --}}
+    {{-- <div>
+        <h1 class="text-[20px] leading-[1.3] font-bold tracking-[-0.025em] text-[#182230]">
+            Pengeluaran Bahan
+        </h1>
+        <p class="mt-[3px] text-[12px] text-[#6D7B90]">
+            Kelola distribusi bahan menuju dapur produksi
+        </p>
+    </div> --}}
 
     {{-- Notifikasi --}}
     @if (session('success'))
-        <div class="mt-[20px] rounded-[8px] bg-[#ECFDF5] px-[16px] py-[10px] font-poppins text-[13px] leading-[19.5px] font-bold text-[#059669]">
+        <div class="mt-4 rounded-[10px] border border-[#B7E4CD] bg-[#EDF7F1] px-4 py-3 text-[12px] font-semibold text-[#257A59]">
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="mt-[48px] grid grid-cols-1 gap-[32px] font-poppins lg:grid-cols-[380px_minmax(0,1fr)]">
-        
-        {{-- Form Pengeluaran --}}
-        <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
-            <div class="flex h-[36px] items-center gap-[10px] bg-[#D9D9D9] px-[16px]">
-                <span class="flex h-[18px] w-[18px] items-center justify-center rounded-[4px] bg-[#D97706]">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 1V9M1 5H9" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </span>
+    @if (session('error'))
+        <div class="mt-4 rounded-[10px] border border-[#F3C7C7] bg-[#FFF0F0] px-4 py-3 text-[12px] font-semibold text-[#D94E4E]">
+            {{ session('error') }}
+        </div>
+    @endif
 
-                <h2 class="text-[14px] leading-[21px] font-bold text-black">Form Pengeluaran</h2>
+    <div class="mt-6 grid grid-cols-1 items-start gap-5 lg:grid-cols-[380px_minmax(0,1fr)]">
+
+        {{-- Form Pengeluaran --}}
+        <section class="overflow-hidden rounded-[15px] border border-[#D9E1EB] bg-white shadow-[0_2px_5px_rgba(28,47,74,0.03)]">
+            <div class="flex min-h-[90px] items-center gap-3 border-b border-[#D9E1EB] px-[26px] pt-[22px] pb-4">
+                <div class="grid h-10 w-10 shrink-0 place-items-center rounded-[9px] bg-[#FFF5E9] text-[#C57822]">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m18 9-6-6-6 6"></path>
+                        <path d="M12 3v14"></path>
+                        <path d="M5 21h14"></path>
+                    </svg>
+                </div>
+
+                <div>
+                    <p class="text-[17px] font-bold tracking-[-0.025em] text-[#182230]">Form Pengeluaran</p>
+                    <p class="mt-[3px] text-[12px] text-[#6D7B90]">Catat bahan yang keluar dari gudang</p>
+                </div>
             </div>
 
-            <form action="{{ route('barang-keluar.store') }}" method="POST" class="px-[16px] pt-[14px] pb-[18px]">
-
+            <form action="{{ route('barang-keluar.store') }}" method="POST" class="space-y-[14px] p-[20px_26px_26px]">
                 @csrf
-                <input type="hidden" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}">
+
+                {{-- Tanggal --}}
+                <div>
+                    <label for="tanggal" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                        Tanggal Pengeluaran
+                    </label>
+
+                    <div class="relative">
+                        <select name="kode" id="keluar-bahan" class="h-[43px] w-full appearance-none rounded-[9px] border bg-white px-3 pr-9 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('kode') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]'}}" >
+                            <option value="">Pilih bahan pangan...</option>
+
+                            @foreach ($bahan as $item)
+                                <option value="{{ $item->kode }}" data-satuan="{{ $item->satuan }}" @selected(old('kode') === $item->kode)>
+                                    {{ $item->nama }} - {{ $item->kode }} (stok {{ $item->stok }} {{ $item->satuan }})
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#6D7B90]" aria-hidden="true">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </div>
+
+                    @error('kode')
+                        <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 {{-- Nama Bahan Pangan --}}
                 <div>
-                    <label for="nama" class="mb-[6px] block text-[13px] leading-[19.5px] font-medium text-[#374151]">
+                    <label for="nama" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
                         Nama Bahan Pangan
                     </label>
 
-                    <input type="text" id="nama" name="nama" value="{{ old('nama') }}" autocomplete="off" placeholder="Contoh: Beras / Minyak Sayur" class="h-[34px] w-full rounded-[8px] border px-[13px] text-[13px] text-[#1D1D1D] outline-none transition-colors placeholder:text-[#9CA3AF] focus:border-[#D97706] {{ $errors->has('nama') ? 'border-[#E11D48]' : 'border-[#D9D9D9]' }}">
+                    <input type="text" id="nama" name="nama" value="{{ old('nama') }}" autocomplete="off" placeholder="Contoh: Beras / Minyak Sayur"
+                        class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('nama') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
 
                     @error('nama')
-                        <p class="mt-[4px] text-[11px] text-[#E11D48]">{{ $message }}</p>
+                        <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- Jumlah --}}
-                <div class="mt-[14px]">
-                    <label for="jumlah" class="mb-[6px] block text-[13px] leading-[19.5px] font-medium text-[#374141]">
-                        Jumlah Masuk
-                    </label>
+                {{-- Jumlah & Satuan --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="jumlah" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                            Jumlah Keluar
+                        </label>
 
-                    <input type="number" name="jumlah" id="jumlah" min="1" value="{{ old('jumlah') }}" class="h-[34px] w-full rounded-[8px] border px-[13px] text-[13px] text-[#1D1D1D] outline-none transition-colors focus:border-[#D97706] {{ $errors->has('jumlah') ? 'border-[#E11D48]' : 'border-[#D9D9D9]' }}">
+                        <input type="number" id="jumlah" name="jumlah" min="1" value="{{ old('jumlah') }}" placeholder="0" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('jumlah') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
+                        @error('jumlah')
+                            <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                    @error('jumlah')
-                        <p class="mt-[4px] text-[11px] text-[#E11D48]">{{ $message }}</p>
-                    @enderror
+                    <div>
+                        <label for="satuan" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                            Satuan
+                        </label>
+
+                        <input type="text" id="keluar_satuan" name="satuan" value="{{ old('satuan') }}"  placeholder="Kg / Liter" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('satuan') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
+
+                        @error('satuan')
+                            <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
-                {{-- Keterangan --}}
-                <div class="mt-[14px]">
-                    <label for="supplier" class="mb-[6px] block text-[13px] leading-[19.5px] font-medium text-[#374151]">
-                        Keterangan / Pemasok
+                {{-- Tujuan / Keterangan --}}
+                <div>
+                    <label for="supplier" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                        Tujuan / Keterangan
                     </label>
 
-                    <input type="text" id="supplier" name="supplier" value="{{ old('supplier') }}" placeholder="Contoh: Distribusi Produksi" class="h-[34px] w-full rounded-[8px] border px-[13px] text-[13px] texr-[#1D1D1D] outline-none transition-colors placeholder:text-[#9CA3AF] focus:border-[#D97706] {{ $errors->has('supplier') ? 'border-[#E11D48]' : 'border-[#D9D9D9]'}}">
+                    <input type="text" id="supplier" name="supplier" value="{{ old('supplier') }}" placeholder="Contoh: Distribusi Produksi" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('supplier') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
 
                     @error('supplier')
-                        <p class="mt-[4px] text-[11xpx] text-[#E11D48]">{{ $message }}</p>
+                        <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- Tombol --}}
-                <button type="submit" class="mt-[18px] h-[36px] w-full cursor-pointer rounded-[8px] bg-[#D97706] text-[14px] font-bold text-white transition-colors hover:bg-[#B45309]">
+                <button type="submit" class="mt-1 inline-flex h-[42px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] text-[12px] font-semibold text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2]">
                     Simpan Pengeluaran
                 </button>
             </form>
-        </div>
+        </section>
 
-        {{-- Riwayat Barang Keluar --}}
-        <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"> 
-            <div class="flex h-[36px] items-center px-[16px]">
-                <h2 class="text-[15px] leading-[22.5px] font-bold text-black">Riwayat Barang Keluar</h2>
+        {{-- Riwayat Pengeluaran --}}
+        <section class="overflow-hidden rounded-[15px] border border-[#D9E1EB] bg-white shadow-[0_2px_5px_rgba(28,47,74,0.03)]">
+            <div class="flex min-h-[90px] items-center justify-between gap-4 px-[26px] pt-[22px] pb-4">
+                <div>
+                    <p class="text-[17px] font-bold tracking-[-0.025em] text-[#182230]">Riwayat Pengeluaran</p>
+                    <p class="mt-[3px] text-[12px] text-[#6D7B90]">
+                        {{ count($barangKeluar) }} transaksi tercatat
+                    </p>
+                </div>
             </div>
 
-            <table class="w-full table-fixed">
-                <thead>
-                    <tr class="h-[38px] bg-[#D9D9D9] text-left text-[13px] leading-[19.5px] font-bold text-[#787878]">
-                        <th class="w-[24%] pl-[16px] font-bold">Waktu</th>
-                        <th class="w-[24%] font-bold">Bahan Pangan</th>
-                        <th class="w-[20%] font-bold">Jumlah</th>
-                        <th class="w-[32%] font-bold">Keterangan</th>
-                    </tr>
-                </thead>
+            <div class="px-[26px] pb-5">
+                <label class="flex h-[45px] items-center gap-[11px] rounded-[9px] border border-[#D9E1EB] bg-[#F7F9FC] px-[14px] text-[#6D7B90] focus-within:border-[#86AFE6] focus-within:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m21 21-4.34-4.34"></path>
+                        <circle cx="11" cy="11" r="8"></circle>
+                    </svg>
 
-                <tbody>
-                    @forelse ($barangKeluar as $item)
-                        <tr class="h-[44px] text-[13px] leading-[19.5px]">
-                            <td class="pl-[16px] text-[#959595]">{{ $item['waktu'] }}</td>
-                            <td class="text-[#787878]">{{ $item['nama'] }}</td>
-                            <td class="font-bold text-[#D97706]">- {{ $item['jumlah'] }} {{ $item['satuan'] }}</td>
-                            <td class="pr-[16px] text-[#959595]">{{ $item['supplier'] }}</td>
-                        </tr>
-                    @empty
+                    <input id="keluar-search" type="search" placeholder="Cari bahan, tujuan, atau waktu..." aria-label="Cari riwayat pengeluaran" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
+                </label>
+            </div>
+
+            <div class="mx-[26px] mb-[26px] overflow-x-auto rounded-[12px] border border-[#D9E1EB]">
+                <table class="w-full min-w-[560px] border-collapse">
+                    <thead>
                         <tr>
-                            <td colspan="4" class="py-[24px] text-center text-[13px] text-[#9CA3AF]">
-                                Belum ada riwayat barang keluar
-                            </td>
+                            <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Waktu</th>
+                            <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Bahan Pangan</th>
+                            <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Jumlah</th>
+                            <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Status</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+
+                    <tbody>
+                        @forelse ($barangKeluar as $item)
+                            <tr data-keluar-row data-cari="{{ strtolower($item->no_transaksi . ' ' . $item->bahan->nama . ' ' . ($item->supplier ?? '') . ' ' . $item->tanggal->format('d M Y')) }}">
+                                <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
+                                    <p class="font-semibold text-[#182230]">{{ $item->created_at->format('H:i') }} WIB</p>
+                                    <span class="mt-[3px] block text-[11px] text-[#98A4B4]">{{ $item->tanggal->format('d M Y') }}</span>
+                                </td>
+
+                                <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
+                                    <p class="font-bold text-[#182230]">{{ $item->bahan->nama }}</p>
+                                    <span class="mt-[3px] block text-[11px] text-[#6D7B90]">
+                                        {{ $item->no_transaksi }} . {{ $item->supplier ?? 'Tanpa Keterangan'}}
+                                    </span>
+                                </td>
+                                
+                                <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] font-bold whitespace-nowrap text-center text-[#C57822]">
+                                    - {{ number_format($item->jumlah, 0, ',', '.') }} {{ $item->satuan }}
+                                </td>
+
+                                <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-center text-[12px] whitespace-nowrap">
+                                    <span class="inline-flex min-h-[23px] items-center rouded-full bg-[#FFF5E9] px-[10px] py-[3px] text-center text-[12px] font-semibold whitespace-nowrap text-[#C57822]">Dikeluarkan</span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="h-[200px] border-t border-[#D9E1EB] px-5 text-center">
+                                    <div class="grid min-h-[200px] place-items-center text-[#98A4B4]">
+                                        <div>
+                                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="mx-auto" aria-hidden="true">
+                                                <path d="m18 9-6-6-6 6"></path>
+                                                <path d="M12 3v14"></path>
+                                                <path d="M5 21h14"></path>
+                                            </svg>
+                                            <p class="mt-3 text-[12px] font-semibold text-[#182230]">Belum ada riwayat pengeluaran</p>
+                                            <span class="mt-[5px] block text-[10px]">Pengeluaran yang dicatat akan muncul di sini.</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+
+                        @if (count($barangKeluar) > 0)
+                            <tr id="keluar-filter-empty" class="hidden">
+                                <td colspan="4" class="h-[200px] border-t border-[#D9E1EB] px-5 text-center">
+                                    <div class="grid min-h-[200px] place-items-center text-[#98A4B4]">
+                                        <div>
+                                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="mx-auto" aria-hidden="true">
+                                                <path d="m21 21-4.34-4.34"></path>
+                                                <circle cx="11" cy="11" r="8"></circle>
+                                            </svg>
+                                            <p class="mt-3 text-[12px] font-semibold text-[#182230]">Data pengeluaran tidak ditemukan</p>
+                                            <span class="mt-[5px] block text-[10px]">Coba gunakan kata kunci lain.</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 @endsection

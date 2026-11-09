@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/bahan-pangan', [BahanController::class, 'index'])->name('bahan.index');
     Route::post('/bahan-pangan', [BahanController::class, 'store'])->name('bahan.store');
     Route::put('/bahan-pangan/{kode}', [BahanController::class, 'update'])->name('bahan.update');
+    Route::delete('/bahan-pangan/{kode}', [BahanController::class, 'destroy'])->name('bahan.destroy');
     Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barang-masuk.index');
     Route::post('/barang-masuk', [BarangMasukController::class, 'store'])->name('barang-masuk.store');
     Route::get('/barang-keluar', [BarangKeluarController::class, 'index'])->name('barang-keluar.index');
@@ -28,7 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/stok-opname', [StokOpnameController::class, 'store'])->name('stok-opname.store');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
-    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::middleware('admin')->group (function () {
+        Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+        Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
+        Route::put('/pengguna/{user}', [PenggunaController::class, 'update'])->name('pengguna.update');
+        Route::post('/pengguna/{user}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    });
 });
 
 Route::post('/logout', [LoginController::class, 'destroy'])

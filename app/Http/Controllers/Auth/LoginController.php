@@ -27,7 +27,7 @@ class LoginController extends Controller
 
         $this->ensureIsNotRateLimited($request);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (! Auth::attempt([...$credentials, 'status' => 'Aktif'], $request->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey($request));
 
             throw ValidationException::withMessages([

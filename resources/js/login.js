@@ -1,11 +1,11 @@
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
-const togglePassword = document.querySelector('[data-toggle-password');
+const togglePassword = document.querySelector('[data-toggle-password]');
 
 // lihat atau sembunyikan password
 if (passwordInput && togglePassword) {
-    const iconEye = togglePassword.querySelector('[data-icon-eye');
-    const iconEyeOff = togglePassword.querySelector('[data-icon-eye-off');
+    const iconEye = togglePassword.querySelector('[data-icon-eye]');
+    const iconEyeOff = togglePassword.querySelector('[data-icon-eye-off]');
 
     togglePassword.addEventListener('click', () => {
         const tampil = passwordInput.type === 'password';
