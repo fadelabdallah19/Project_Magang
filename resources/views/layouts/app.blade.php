@@ -28,7 +28,7 @@
                     </svg>
                 </button>
 
-                <span class="font-poppins text-[15px] font-bold text-white">
+                <span class="font-inter text-[15px] font-bold text-white">
                     MBG Smart Stock
                 </span>
             </header>

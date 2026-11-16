@@ -1,7 +1,7 @@
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex h-screen w-[281px] shrink-0 -translate-x-full flex-col overflow-y-auto bg-[#071E49] transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:translate-x-0 lg:self-start">
 
     {{-- Logo --}}
-    <div class="flex items-start justify-between px-[27px] pt-[43px] font-poppins">
+    <div class="flex items-start justify-between px-[27px] pt-[43px] font-inter">
         <div>
             <p class="text-[25px] leading-[37.5px] font-bold text-white">MBG Smart Stock</p>
             <p class="text-[20px] leading-[30px] font-normal text-white">Project Magang</p>
@@ -43,10 +43,10 @@
         );
     @endphp
 
-    <nav class="mt-[44px] space-y-[17px] px-[34px] font-poppins text-[15px] font-bold text-white">
+    <nav class="mt-[44px] space-y-[17px] px-[34px] font-inter text-[15px] font-bold text-white">
         @foreach ($navItems as $item)
             @php($isActive = $item['route'] && request()->routeIs($item['route']))
-            
+
             <a href="{{ $item['route'] ? route($item['route']) : '#' }}"
             class="flex h-[37px] items-center justify-center rounded-[10px] border transition-colors {{ $isActive ? 'border-white/50' : 'border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/15'}}">
                 {{ $item['label'] }}
@@ -58,12 +58,12 @@
     <div class="mt-auto px-[19px] pb-[41px]">
         <div class="flex h-[70px] items-center rounded-[10px] border border-white/15 bg-white/10 pl-4 pr-4 backdrop-blur-sm">
             <div class="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-[#071E49] text-[20px] font-bold text-white">
-                AD
+                {{ $inisial }}
             </div>
 
             <div class="ml-[6px] min-w-0">
-                <p class="truncate text-[15px] leading-[18.2px] font-bold text-white">Administrator</p>
-                <p class="text-[10px] leading-[12.1px] text-white">Hak semua akses</p>
+                <p class="truncate text-[15px] leading-[18.2px] font-bold text-white">{{ $user->name }}</p>
+                <p class="text-[10px] leading-[12.1px] text-white">{{ $user->role === 'Admin' ? 'Hak semua akses' : $user->role }}</p>
             </div>
 
             <form method="POST" action="{{ route('logout')}}" class="ml-auto">

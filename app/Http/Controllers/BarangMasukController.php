@@ -11,12 +11,26 @@ use Illuminate\View\View;
 
 class BarangMasukController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $barangMasuk = BarangMasuk::with('bahan')
-            ->latest('tanggal')
-            ->latest('id')
-            ->get();
+        $barangMasuk = BarangMasuk::query()
+        ->with('bahan')
+        ->when($request->filled('q'), function ($query) use ($request) {
+            $keyword = $request->string('q')->toString();
+
+            $query->where(function ($sub) use ($keyword) {
+                $sub->where('no_transaksi', 'like', "%{$keyword}%")
+                ->orWhere('supplier', 'like', "%{$keyword}%")
+                ->orWhereHas('bahan', function ($bahan) use ($keyword) {
+                    $bahan->where('nama', 'like', "%{$keyword}%")
+                    ->orWhere('kode', 'like', "%{$keyword}%");
+                });
+            });
+        })
+        ->latest('tanggal')
+        ->latest('id')
+        ->paginate(10)
+        ->withQueryString();
 
         $bahan = Bahan::orderBy('nama')->get();
 

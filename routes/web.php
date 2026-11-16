@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
         Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
         Route::put('/pengguna/{user}', [PenggunaController::class, 'update'])->name('pengguna.update');
-        Route::post('/pengguna/{user}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+        Route::delete('/pengguna/{user}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
     });
 });
 

@@ -16,7 +16,7 @@ const initPenggunaFilter = () => {
         rows.forEach((row) => {
             const cocokNama = row.dataset.nama.includes(keyword);
             const cocokUsername = row.dataset.username.includes(keyword);
-            const cocokRole = selectedRole === 'Semua Role' || row.dataset.role === selectedRole;
+            const cocokRole = selectedRole === '' || selectedRole === 'Semua Role' || row.dataset.role === selectedRole;
             const tampil = (cocokNama || cocokUsername) && cocokRole;
 
             row.classList.toggle('hidden', !tampil);

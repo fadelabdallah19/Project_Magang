@@ -99,7 +99,7 @@
                     <path d="m7 10 5 5 5-5"></path>
                     <path d="M5 21h14"></path>
                 </svg>
-                Unduh Laporan
+                Export CSV
             </a>
         </div>
 
@@ -110,7 +110,7 @@
                         <th class="h-[47px] w-[16%] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Kode</th>
                         <th class="h-[47px] w-[30%] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Nama Bahan</th>
                         <th class="h-[47px] w-[20%] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Kategori</th>
-                        <th class="h-[47px] w-[18%] whitespace-nowrap bg-[#F8FAFC] px-5 text-right text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Stok Akhir</th>
+                        <th class="h-[47px] w-[18%] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Stok Akhir</th>
                         <th class="h-[47px] w-[16%] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Status</th>
                     </tr>
                 </thead>
@@ -134,7 +134,7 @@
                                 {{ $item->kategori }}
                             </td>
 
-                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-right text-[12px] whitespace-nowrap">
+                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-center text-[12px] whitespace-nowrap">
                                 <span class="font-bold text-[#182230]">{{ number_format($item->stok, 0, ',', '.') }}</span>
                                 <span class="ml-1 text-[10px] text-[#6D7B90]">{{ $item->satuan }}</span>
                             </td>
@@ -157,8 +157,8 @@
                                             <path d="M16 17H8"></path>
                                             <path d="M10 9H8"></path>
                                         </svg>
-                                        <p class="mt-3 text-[12px] font-semibold text-[#182230]">Belum ada data laporan</p>
-                                        <span class="mt-[5px] block text-[10px]">Data laporan persediaan akan muncul di sini.</span>
+                                        <p class="mt-3 text-[14px] font-semibold text-[#182230]">Belum ada data laporan</p>
+                                        <span class="mt-[5px] block text-[12px]">Data laporan persediaan akan muncul di sini.</span>
                                     </div>
                                 </div>
                             </td>

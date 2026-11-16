@@ -16,7 +16,7 @@ const initBahanFilter = () => {
         rows.forEach((row) => {
             const cocokKode = row.dataset.kode.includes(keyword);
             const cocokNama = row.dataset.nama.includes(keyword);
-            const cocokKategori = selectedKategori === 'Semua Kategori' || row.dataset.kategori === selectedKategori;
+            const cocokKategori = selectedKategori === '' || selectedKategori === 'Semua Kategori' || row.dataset.kategori === selectedKategori;
             const tampil = (cocokKode || cocokNama) && cocokKategori;
 
             row.classList.toggle('hidden', !tampil);

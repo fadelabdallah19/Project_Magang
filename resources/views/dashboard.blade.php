@@ -93,7 +93,7 @@
     </div>
 
     {{-- konten utama --}}
-    <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div class="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
 
         {{-- status bahan pangan --}}
         <div class="rounded-2xl border border-[#DCE4EE] bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.05)] lg:col-span-2">
@@ -112,8 +112,8 @@
                             <th class="px-4 py-3 text-right">Stok Tersedia</th>
                             <th class="rounded-r-lg px-4 py-3 text-center">Status</th>
                         </tr>
-                    </thead>        
-                    
+                    </thead>
+
                     <tbody class="divide-y divide-[#DCE4EE]">
                         @forelse ($bahanDashboard as $item)
                             @php
@@ -141,7 +141,7 @@
         <div class="flex flex-col rounded-2xl border border-[#DCE4EE] bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
             <div class="mb-4 flex items-center justify-between">
                 <h2 class="text-base font-bold text-[#1F2937]">Aktivitas Terakhir</h2>
-                <span class="text-xs text-[#64748B]">Hari ini</span>
+                <span class="text-[12px] text-[#64748B]">Hari ini</span>
             </div>
 
             <div class="flex-1 space-y-4">
@@ -177,9 +177,9 @@
                         <div class="min-w-0 flex-1">
                             <div class="flex justify-between gap-2">
                                 <p class="text-xs font-bold text-[#1F2937]">{{ $activity['judul'] }}</p>
-                                <span class="shrink-0 text-[10px] text-[#64748B]">{{ $labelWaktu }}</span>
+                                <span class="shrink-0 text-xs text-[#64748B]">{{ $labelWaktu }}</span>
                             </div>
-                            <p class="mt-0.5 text-[#64748B]">{{ $activity['deskripsi'] }}</p>
+                            <p class="mt-0.5 text-xs text-[#64748B]">{{ $activity['deskripsi'] }}</p>
                         </div>
                     </div>
                 @empty
@@ -197,7 +197,7 @@
                 @endforelse
             </div>
 
-            <a href="{{ route('barang-keluar.index') }}" class="mt-4 block w-full rounded-xl bg-[#F4F7FB] py-2 text-center text-xs font-bold text-[#1F2937] transition-colors hover:bg-slate-200">Lihat Semua Pengeluaran</a>
+            {{-- <a href="{{ route('barang-keluar.index') }}" class="mt-4 block w-full rounded-xl bg-[#F4F7FB] py-2 text-center text-xs font-bold text-[#1F2937] transition-colors hover:bg-slate-200">Lihat Semua Pengeluaran</a> --}}
         </div>
     </div>
 @endsection

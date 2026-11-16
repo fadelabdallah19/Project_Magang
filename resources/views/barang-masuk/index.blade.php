@@ -57,7 +57,7 @@
                     <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('tanggal') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
 
                     @error('tanggal')
-                        <p class="mt-[4px] text-[10px] text-[#D94E4E]">{{ $message }}</p>
+                        <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -97,7 +97,7 @@
                         <input type="number" id="jumlah" name="jumlah" min="1" value="{{ old('jumlah') }}" placeholder="0" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('jumlah') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
 
                         @error('jumlah')
-                            <p class="mt-[4px] text-[10px] text-[#D94E4E]">{{ $message }}</p>
+                            <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -141,21 +141,21 @@
                 <div>
                     <p class="text-[17px] font-bold tracking-[-0.025em] text-[#182230]">Riwayat Penerimaan</p>
                     <p class="mt-[3px] text-[12px] text-[#6D7B90]">
-                        {{ count($barangMasuk) }} transaksi tercatat
+                        {{ $barangMasuk->total() }} transaksi tercatat
                     </p>
                 </div>
             </div>
 
-            <div class="px-[26px] pb-5">
+            <form method="GET" action="{{ route('barang-masuk.index') }}" class="px-[26px] pb-5">
                 <label class="flex h-[45px] items-center gap-[11px] rounded-[9px] border border-[#D9E1EB] bg-[#F7F9FC] px-[14px] text-[#6D7B90] focus-within:border-[#86AFE6] focus-within:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="m21 21-4.34-4.34"></path>
                         <circle cx="11" cy="11" r="8"></circle>
                     </svg>
 
-                    <input id="masuk-search" type="search" placeholder="Cari no. penerimaan, bahan, atau pemasok..." aria-label="Cari riwayat penerimaan" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
+                    <input id="masuk-search" type="search" name="q" value="{{ request('q') }}" placeholder="Cari no. penerimaan, bahan, atau pemasok..." aria-label="Cari riwayat penerimaan" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
                 </label>
-            </div>
+            </form>
 
             <div class="mx-[26px] mb-[26px] overflow-x-auto rounded-[12px] border border-[#D9E1EB]">
                 <table class="w-full min-w-[560px] border-collapse">
@@ -173,12 +173,12 @@
                             <tr data-masuk-row data-cari="{{ strtolower($item->no_transaksi . ' ' . $item->bahan->kode . ' ' . $item->bahan->nama . ' ' . ($item->supplier ?? '') . ' ' . $item->tanggal->format('d M Y')) }}">
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
                                     <p class="font-semibold text-[#182230]">{{ $item->tanggal->format('d M Y') }}</p>
-                                    <span class="mt-[3px] block text-[10px] text-[#98A4B4]">{{ $item->no_transaksi }}</span>
+                                    <span class="mt-[3px] block text-[11px] text-[#98A4B4]">{{ $item->no_transaksi }}</span>
                                 </td>
 
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
                                     <p class="font-semibold text-[#182230]">{{ $item->bahan->nama }}</p>
-                                    <span class="mt-[3px] block text-[10px] text-[#6D7B90]">{{ $item->bahan->kode }} . {{ $item->supplier ?? 'Tanpa pemasok' }}</span>
+                                    <span class="mt-[3px] block text-[11px] text-[#6D7B90]">{{ $item->bahan->kode }} . {{ $item->supplier ?? 'Tanpa pemasok' }}</span>
                                 </td>
 
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] font-bold whitespace-nowrap text-center text-[#257A59]">
@@ -200,15 +200,15 @@
                                                 <path d="M19 21H5"></path>
                                             </svg>
 
-                                            <p class="mt-3 text-[12px] font-semibold text-[#182230]">Belum ada riwayat</p>
-                                            <span class="mt-[5px] block text-[10px]">Penerimaan yang dicatat akan muncul disini.</span>
+                                            <p class="mt-3 text-[14px] font-semibold text-[#182230]">Belum ada riwayat</p>
+                                            <span class="mt-[5px] block text-[12px]">Penerimaan yang dicatat akan muncul disini.</span>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         @endforelse
 
-                        @if (count($barangMasuk) > 0)
+                        @if ($barangMasuk->isNotEmpty())
                             <tr id="masuk-filter-empty" class="hidden">
                                 <td colspan="4" class="h-[200px] border-t border-[#D9E1EB] px-5 text-center">
                                     <div class="grid min-h-[200px] place-items-center text-[#98A4B4]">
@@ -227,6 +227,7 @@
                     </tbody>
                 </table>
             </div>
+            @include('layouts.partials.pagination', ['paginator' => $barangMasuk])
         </section>
     </div>
 @endsection

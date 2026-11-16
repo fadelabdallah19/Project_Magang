@@ -48,4 +48,18 @@ class Bahan extends Model
     {
         return $this->stok <= self::STOCK_MINIMUM ? 'Stok Rendah' : 'Aman';
     }
+
+    // kode bahan otomatis
+    public const KODE_PREFIX = 'MBG-';
+
+    public static function generateKode(): string
+    {
+        $lastNumber = static::query()
+        ->where('kode', 'like', self::KODE_PREFIX . '%')
+        ->pluck('kode')
+        ->map(fn (string $kode): int => (int) substr($kode, strlen(self::KODE_PREFIX)))
+        ->max() ?? 0;
+
+        return self::KODE_PREFIX . str_pad((string) ($lastNumber + 1), 3, '0', STR_PAD_LEFT);
+    }
 }

@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $akun = [
-            ['name' => 'Administrator', 'username' => 'admin.mbg', 'email' => 'admin@mbg.test', 'role' => 'Admin'],
-            ['name' => 'Petugas Gudang', 'username' => 'petugas.gudang', 'email' => 'gudang@mbg.test', 'role' => 'Petugas Gudang'],
+            ['name' => 'Administrator', 'username' => 'admin_mbg', 'email' => 'admin@mbg.test', 'role' => 'Admin'],
+            ['name' => 'Petugas Gudang', 'username' => 'petugas_gudang', 'email' => 'gudang@mbg.test', 'role' => 'Petugas Gudang'],
             ['name' => 'Pimpinan', 'username' => 'pimpinan', 'email' => 'pimpinan@mbg.test', 'role' => 'Pengawas'],
         ];
 
@@ -33,7 +33,5 @@ class DatabaseSeeder extends Seeder
             'role' => 'Admin',
             'status' => 'Aktif',
         ]);
-
-        $this->call(BahanSeeder::class);
     }
 }

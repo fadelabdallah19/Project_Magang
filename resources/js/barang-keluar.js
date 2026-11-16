@@ -3,7 +3,7 @@ const satuanInput = document.getElementById('keluar-satuan');
 
 if (bahanSelect && satuanInput) {
     const syncSatuan = () => {
-        const selected = bahanSelect.option[bahanSelect.selectedIndex];
+        const selected = bahanSelect.options[bahanSelect.selectedIndex];
         satuanInput.value = selected?.dataset.satuan ?? '';
     };
 
@@ -25,7 +25,7 @@ if (search) {
 
         rows.forEach((row) => {
             const matches = row.dataset.cari.includes(keyword);
-            row.classList.toggle('hiddem', !matches);
+            row.classList.toggle('hidden', !matches);
 
             if (matches) {
                 visible++

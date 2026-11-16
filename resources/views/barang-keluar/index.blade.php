@@ -54,6 +54,20 @@
                         Tanggal Pengeluaran
                     </label>
 
+                    <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('tanggal') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
+
+                    @error('tanggal')
+                        <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                    {{-- bahan pangan --}}
+                <div>
+                    <label for="keluar-bahan" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                        Bahan Pangan
+                    </label>
+
+
                     <div class="relative">
                         <select name="kode" id="keluar-bahan" class="h-[43px] w-full appearance-none rounded-[9px] border bg-white px-3 pr-9 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('kode') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]'}}" >
                             <option value="">Pilih bahan pangan...</option>
@@ -76,7 +90,7 @@
                 </div>
 
                 {{-- Nama Bahan Pangan --}}
-                <div>
+                {{-- <div>
                     <label for="nama" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
                         Nama Bahan Pangan
                     </label>
@@ -87,7 +101,7 @@
                     @error('nama')
                         <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> --}}
 
                 {{-- Jumlah & Satuan --}}
                 <div class="grid grid-cols-2 gap-3">
@@ -103,15 +117,15 @@
                     </div>
 
                     <div>
-                        <label for="satuan" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                        <label for="keluar-satuan" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
                             Satuan
                         </label>
 
-                        <input type="text" id="keluar_satuan" name="satuan" value="{{ old('satuan') }}"  placeholder="Kg / Liter" class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('satuan') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
+                        <input type="text" id="keluar-satuan" name="satuan" value="{{ old('satuan') }}"  placeholder="Kg / Liter" readonly class="h-[43px] w-full rounded-[9px] border px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] {{ $errors->has('satuan') ? 'border-[#D94E4E]' : 'border-[#D9E1EB]' }}">
 
-                        @error('satuan')
+                        {{-- @error('satuan')
                             <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
-                        @enderror
+                        @enderror --}}
                     </div>
                 </div>
 
@@ -140,21 +154,21 @@
                 <div>
                     <p class="text-[17px] font-bold tracking-[-0.025em] text-[#182230]">Riwayat Pengeluaran</p>
                     <p class="mt-[3px] text-[12px] text-[#6D7B90]">
-                        {{ count($barangKeluar) }} transaksi tercatat
+                        {{ $barangKeluar->total() }} transaksi tercatat
                     </p>
                 </div>
             </div>
 
-            <div class="px-[26px] pb-5">
+            <form method="GET" action="{{ route('barang-keluar.index') }}" class="px-[26px] pb-5">
                 <label class="flex h-[45px] items-center gap-[11px] rounded-[9px] border border-[#D9E1EB] bg-[#F7F9FC] px-[14px] text-[#6D7B90] focus-within:border-[#86AFE6] focus-within:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="m21 21-4.34-4.34"></path>
                         <circle cx="11" cy="11" r="8"></circle>
                     </svg>
 
-                    <input id="keluar-search" type="search" placeholder="Cari bahan, tujuan, atau waktu..." aria-label="Cari riwayat pengeluaran" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
+                    <input id="keluar-search" type="search" name="q" value="{{ request('q') }}" placeholder="Cari bahan, tujuan, atau waktu..." aria-label="Cari riwayat pengeluaran" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
                 </label>
-            </div>
+            </form>
 
             <div class="mx-[26px] mb-[26px] overflow-x-auto rounded-[12px] border border-[#D9E1EB]">
                 <table class="w-full min-w-[560px] border-collapse">
@@ -181,13 +195,13 @@
                                         {{ $item->no_transaksi }} . {{ $item->supplier ?? 'Tanpa Keterangan'}}
                                     </span>
                                 </td>
-                                
+
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] font-bold whitespace-nowrap text-center text-[#C57822]">
                                     - {{ number_format($item->jumlah, 0, ',', '.') }} {{ $item->satuan }}
                                 </td>
 
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-center text-[12px] whitespace-nowrap">
-                                    <span class="inline-flex min-h-[23px] items-center rouded-full bg-[#FFF5E9] px-[10px] py-[3px] text-center text-[12px] font-semibold whitespace-nowrap text-[#C57822]">Dikeluarkan</span>
+                                    <span class="inline-flex min-h-[23px] items-center rounded-full bg-[#FFF5E9] px-[10px] py-[3px] text-center text-[12px] font-semibold whitespace-nowrap text-[#C57822]">Dikeluarkan</span>
                                 </td>
                             </tr>
                         @empty
@@ -200,15 +214,15 @@
                                                 <path d="M12 3v14"></path>
                                                 <path d="M5 21h14"></path>
                                             </svg>
-                                            <p class="mt-3 text-[12px] font-semibold text-[#182230]">Belum ada riwayat pengeluaran</p>
-                                            <span class="mt-[5px] block text-[10px]">Pengeluaran yang dicatat akan muncul di sini.</span>
+                                            <p class="mt-3 text-[14px] font-semibold text-[#182230]">Belum ada riwayat pengeluaran</p>
+                                            <span class="mt-[5px] block text-[12px]">Pengeluaran yang dicatat akan muncul di sini.</span>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         @endforelse
 
-                        @if (count($barangKeluar) > 0)
+                        @if ($barangKeluar->isNotEmpty())
                             <tr id="keluar-filter-empty" class="hidden">
                                 <td colspan="4" class="h-[200px] border-t border-[#D9E1EB] px-5 text-center">
                                     <div class="grid min-h-[200px] place-items-center text-[#98A4B4]">
@@ -227,6 +241,7 @@
                     </tbody>
                 </table>
             </div>
+            @include('layouts.partials.pagination', ['paginator' => $barangKeluar])
         </section>
     </div>
 @endsection

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +17,7 @@
 
         {{-- background --}}
         <img src="{{ asset('images/login-bg.jpg') }}" alt="" class="absolute inset-0 h-full w-full object-cover">
-        <div class="absolute inset-0" style="background: linear-gradient(155deg, rgba(13,38, 64, 0.90) 0%, rgba(10, 16, 25, 0.94%) 100%);"></div>
+        <div class="absolute inset-0" style="background: linear-gradient(155deg, rgba(13, 38, 64, 0.92) 0%, rgba(10, 16, 25, 0.96) 100%);"></div>
 
         {{-- card --}}
         <main class="relative z-10 grid w-full max-w-[850px] overflow-hidden rounded-[24px] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/15 lg:min-h-[641px] lg:grid-cols-[45%_55%]">
@@ -27,28 +27,17 @@
 
                 {{-- logo --}}
                 <div class="flex items-center gap-[14px]">
-                    {{-- <span class="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[12px] bg-[#1677E8]">
-                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M2 22 16 8" />
-                            <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
-                            <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
-                            <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
-                            <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z" />
-                            <path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" />
-                            <path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" />
-                            <path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" />
-                        </svg> --}}
-                    </span>
-
-                    <div>
-                        <p class="text-[24px] leading-[20px] font-bold text-white">MBG Smart Stock</p>
-                        <p class="mt-[4px] text-[16px] leading-[16px] text-[#99A3AF]">Stok Pangan Terintegrasi</p>
+                    <div class="min-w-0">
+                        <p class="text-[22px] leading-[26px] font-bold text-white sm:text-[24px] sm:leading-[28px]">MBG Smart Stock</p>
+                        <p class="mt-[3px] text-[13px] leading-[17px] text-[#A9B6C6] sm:text-[14px] sm:leading-[18px]">Stok Pangan Terintegrasi</p>
                     </div>
                 </div>
 
+                <img src="{{ asset('images/card-login/image.png') }}" alt="Logo Badan Gizi Nasional" class="mt-[16px] h-[96px] w-[96px] shrink-0 self-center rounded-full bg-white object-contain p-[2px] ring-1 ring-white/25 sm:h-[230px] sm:w-[230px]">
+
+
                 {{-- copyright --}}
                 <div class="mt-[40px] lg:mt-0">
-                    <p class="text-[10px] leading-[14px] font-bold tracking-[2px] text-[#75B8FF]">SISTEM OPERASIONAL MBG</p>
                     <h1 class="mt-[18px] max-w-[290px] text-[28px] leading-[34px] font-bold text-white lg:text-[30px]" >Kelola stok pangan dengan lebih pasti</h1>
                 </div>
             </section>
@@ -57,12 +46,12 @@
             <section class="flex flex-col bg-white">
 
                 {{-- form login --}}
-                <form action="{{ route('login.store') }}" method="POST" class="flex-1 px-[28px] pt-[32px] pb-[28px] lg:px-[48px] lg:pt-[136px] lg:pb-[112px]">
+                <form action="{{ route('login.store') }}" method="POST" class="flex flex-1 flex-col justify-center px-[28px] py-[32px] lg:px-[48px] lg:py-[64px]">
                     @csrf
-                    <h2 class="text-[24px] leading-[32px] font-bold text-[#1F2937]">Selamat datang</h2>
-                    <p class="mt-[10px] text-[13px] leading-[20px] text-[#64748B]">Silahkan login untuk mendapatkan akses</p>
+                    <h2 class="text-[26px] leading-[34px] font-bold text-[#1F2937]">Selamat datang</h2>
+                    <p class="mt-[8px] text-[13px] leading-[20px] text-[#64748B]">Silakan login untuk mendapatkan akses.</p>
 
-                    <div class="mt-[30px]">
+                    <div class="mt-[28px]">
                         <label for="username" class="block text-[12px] leading-[18px] font-semibold text-[#1F2937]">
                             Username
                         </label>
@@ -128,21 +117,26 @@
                 </form>
 
                 {{-- akses demo --}}
-                <footer class="border-t border-[#DCE4EE] px-[28px] py-[18px] lg:px-[48px]">
+                <footer class="border-t border-[#DCE4EE] bg-[#F8FAFC] px-[28px] py-[18px] lg:px-[48px]">
                     <div class="flex flex-col gap-[12px] sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p class="text-[13px] leading-[18px] font-bold text-[#1F2937]">Akses demo</p>
-                            <p class="mt-[2px] text-[11px] leading-[16px] text-[#64748B]">Akses login cepat</p>
+                            <p class="mt-[2px] text-[11px] leading-[16px] text-[#64748B]">Klik akun untuk mengisi form otomatis.</p>
                         </div>
-                        
-                        <div class="flex flex-warp items-center gap-[8px]">
-                            <button type="button" data-demo-username="admin.mbg" class="h-[27px] transition-colors hover:border-[#1677E8] hover:text-[#1677E8]">
+
+                        <div class="flex flex-nowrap items-center gap-[8px]">
+                            <button type="button" data-demo-username="admin_mbg" data-demo-password="password" title="Isi otomatis akun Admin" class="inline-flex h-[32px] shrink-0 items-center gap-[6px] rounded-full border border-[#DCE4EE] bg-white px-[9px] text-[10px] font-semibold whitespace-nowrap text-[#334155] transition-colors hover:border-[#1677E8] hover:text-[#1677E8] focus:ring-2 focus:ring-[#1677E8]/20 focus:outline-none">
+                                <span class="justify-center rounded-full"></span>
                                 Admin
                             </button>
-                            <button type="button" data-demo-username="petugas.gudang" class="h-[27px] transition-colors hover:border-[#1677E8] hover:text-[#1677E8]">
-                                Petugas Gudang
+
+                            <button type="button" data-demo-username="petugas_gudang" data-demo-password="password" title="Isi otomatis akun Petugas Gudang" class="inline-flex h-[30px] shrink-0 items-center gap-[5px] rounded-full border border-[#DCE4EE] bg-white px-[9px] text-[10px] font-semibold whitespace-nowrap text-[#334155] transition-colors hover:border-[#1677E8] hover:text-[#1677E8] focus:ring-2 focus:ring-[#1677E8]/20 focus:outline-none sm:h-[32px] sm:px-[12px] sm:text-[11px]">
+                                <span class="justify-center rounded-full"></span>
+                                Petugas
                             </button>
-                            <button type="button" data-demo-username="pimpinan" class="h-[27px] transition-colors hover:border-[#1677E8] hover:text-[#1677E8]">
+
+                            <button type="button" data-demo-username="pimpinan" data-demo-password="password" title="Isi otomatis akun Pimpinan" class="inline-flex h-[30px] shrink-0 items-center gap-[5px] rounded-full border border-[#DCE4EE] bg-white px-[9px] text-[10px] font-semibold whitespace-nowrap text-[#334155] transition-colors hover:border-[#1677E8] hover:text-[#1677E8] focus:ring-2 focus:ring-[#1677E8]/20 focus:outline-none sm:h-[32px] sm:px-[12px] sm:text-[11px]">
+                                <span class="justify-center rounded-full"></span>
                                 Pimpinan
                             </button>
                         </div>

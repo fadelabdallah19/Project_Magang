@@ -8,15 +8,30 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class BarangKeluarController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $barangKeluar = BarangKeluar::with('bahan')
-            ->latest('tanggal')
-            ->latest('id')
-            ->get();
+        $barangKeluar = BarangKeluar::query()
+        ->with('bahan')
+        ->when($request->filled('q'), function ($query) use ($request) {
+            $keyword = $request->string('q')->toString();
+
+            $query->where(function ($sub) use ($keyword) {
+                $sub->where('no_transaksi', 'like', "%{$keyword}%")
+                ->orWhere('supplier', 'like', "%{$keyword}%")
+                ->orWhereHas('bahan', function ($bahan) use ($keyword) {
+                    $bahan->where('nama', 'like', "%{$keyword}%")
+                    ->orWhere('kode', 'like', "%{$keyword}%");
+                });
+            });
+        })
+        ->latest('tanggal')
+        ->latest('id')
+        ->paginate(10)
+        ->withQueryString();
 
         $bahan = Bahan::orderBy('nama')->get();
 
@@ -41,6 +56,17 @@ class BarangKeluarController extends Controller
         }
 
         DB::transaction(function () use ($validated, $bahan) {
+
+            $bahan = Bahan::where('kode', $validated['kode'])
+            ->lockForUpdate()
+            ->firstOrFail();
+
+            if ($bahan->stok < $validated['jumlah']) {
+                throw ValidationException::withMessages([
+                    'jumlah' => "Stok {$bahan->nama} tidak mencukupi. Tersedia {$bahan->stok} {$bahan->satuan}."
+                ]);
+            }
+
             BarangKeluar::create([
                 'no_transaksi' => $this->nomorTransaksi(),
                 'bahan_id' => $bahan->id,

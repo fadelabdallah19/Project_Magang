@@ -11,9 +11,20 @@ use Illuminate\View\View;
 
 class StokOpnameController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $stok = Bahan::orderBy('nama')->get();
+        $stok = Bahan::query()
+        ->when($request->filled('q'), function ($query) use ($request) {
+            $keyword = $request->string('q')->toString();
+
+            $query->where(function ($sub) use ($keyword) {
+                $sub->where('nama', 'like', "%{$keyword}%")
+                ->orWhere('kode', 'like', "%{$keyword}%");
+            });
+        })
+        ->orderBy('nama')
+        ->paginate(10)
+        ->withQueryString();
         
         return view('stok-opname.index', compact('stok'));
     }

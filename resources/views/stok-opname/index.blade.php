@@ -40,21 +40,21 @@
             </div>
 
             <span class="inline-flex h-[30px] items-center rounded-full bg-[#EDF4FF] px-[12px] text-[14px] font-semibold whitespace-nowrap text-[#2D76D6]">
-                {{ count($stok) }} Bahan
+                {{ $stok->total() }} Bahan
             </span>
         </div>
 
         {{-- Pencarian --}}
-        <div class="px-[26px] pb-[24px] max-[800px]:px-[18px] max-[560px]:px-4 max-[560px]:pb-[18px]">
+        <form action="{{ route('stok-opname.index') }}" method="GET" class="px-[26px] pb-[24px] max-[800px]:px-[18px] max-[560px]:px-4 max-[560px]:pb-[18px]">
             <label class="flex h-[45px] items-center gap-[11px] rounded-[9px] border border-[#D9E1EB] bg-[#F7F9FC] px-[14px] text-[#6D7B90] focus-within:border-[#86AFE6] focus-within:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m21 21-4.34-4.34"></path>
                     <circle cx="11" cy="11" r="8"></circle>
                 </svg>
 
-                <input id="opname-search" type="search" placeholder="Cari bahan pangan..." aria-label="Cari bahan pangan" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
+                <input id="opname-search" type="search" name="q" value="{{ request('q' )}}" placeholder="Cari bahan pangan..." aria-label="Cari bahan pangan" class="min-w-0 flex-1 bg-transparent text-[12px] text-[#182230] outline-none placeholder:text-[#9BA6B6]">
             </label>
-        </div>
+        </form>
 
         {{-- Tabel --}}
         <div class="mx-[26px] mb-[26px] overflow-x-auto rounded-[12px] border border-[#D9E1EB] max-[800px]:mx-[18px] max-[560px]:mx-4 max-[560px]:mb-4">
@@ -84,7 +84,7 @@
                             </td>
 
                             <td class="h-[68px] border-t border-[#D9E1EB] px-5">
-                                <input type="number" name="stok_fisik" min="0" required form="opname-form-{{ $i }}" placeholder="{{ $item->stok }}" data-stok-fisik data-row="{{ $i }}" data-sistem="{{ $item->stok }}" aria-label="Stok fisik {{ $item->nama }}" class="h-[43px] w-[120px] rounded-[9px] border border-[#D9E1EB] px-3 text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
+                                <input type="number" name="stok_fisik" min="0" required form="opname-form-{{ $i }}" placeholder="{{ $item->stok }}" data-stok-fisik data-row="{{ $i }}" data-sistem="{{ $item->stok }}" aria-label="Stok fisik {{ $item->nama }}" class="h-[43px] w-[120px] rounded-[9px] border border-[#D9E1EB] px-3 text-center text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
                             </td>
 
                             <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-center text-[12px] whitespace-nowrap">
@@ -102,15 +102,15 @@
                             <td colspan="5" class="h-[200px] border-t border-[#D9E1EB] px-5 text-center">
                                 <div class="grid min-h-[200px] place-items-center text-[#98A4B4]">
                                     <div>
-                                        <p class="mt-3 text-[12px] font-semibold text-[#182230]">Belum ada data stok</p>
-                                        <span class="mt-[5px] block text-[10px]">Data stok bahan akan muncul di sini.</span>
+                                        <p class="mt-3 text-[14px] font-semibold text-[#182230]">Belum ada data stok</p>
+                                        <span class="mt-[5px] block text-[12px]">Data stok bahan akan muncul di sini.</span>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                     @endforelse
 
-                    @if (count($stok) > 0)
+                    @if ($stok->isNotEmpty())
                         <tr id="opname-filter-empty" class="hidden">
                             <td colspan="5" class="h-[200px] border-t border-[#D9E1EB] px-5 text-center">
                                 <div class="grid min-h-[200px] place-items-center text-[#98A4B4]">
@@ -129,5 +129,6 @@
                 </tbody>
             </table>
         </div>
+        @include('layouts.partials.pagination', ['paginator' => $stok])
     </section>
 @endsection

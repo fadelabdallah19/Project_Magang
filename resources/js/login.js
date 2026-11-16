@@ -27,8 +27,8 @@ if (usernameInput && passwordInput) {
     document.querySelectorAll('[data-demo-username]').forEach((tombol) => {
         tombol.addEventListener('click', () => {
             usernameInput.value = tombol.dataset.demoUsername;
-            passwordInput.value = 'password'; // sesuaikan dengan akun demo
-            passwordInput.focus()
+            passwordInput.value = tombol.dataset.demoPassword ?? 'password';
+            passwordInput.focus();
         });
     });
 }

@@ -10,22 +10,43 @@ use Illuminate\View\View;
 
 class BahanController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $bahan = Bahan::orderBy('kode')->get();
+        $bahan = Bahan::query()
+        ->when($request->filled('q'), function ($query) use ($request) {
+            $keyword = $request->string('q')->toString();
 
-        return view('bahan.index', compact('bahan'));
+            $query->where(function ($sub) use ($keyword) {
+                $sub->where('nama', 'like' ,"%{$keyword}%")
+                ->orWhere('kode', 'like', "%{$keyword}%");
+            });
+        })
+        ->when($request->filled('kategori'), fn ($query) => $query->where('kategori', $request->input('kategori')))
+        ->orderBy('kode')
+        ->paginate(10)
+        ->withQueryString();
+
+        $kategoriList = Bahan::query()
+        ->select('kategori')
+        ->distinct()
+        ->orderBy('kategori')
+        ->pluck('kategori');
+
+        $kodeBaru = Bahan::generateKode();
+
+        return view('bahan.index', compact('bahan', 'kategoriList', 'kodeBaru'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'kode' => ['required', 'string', 'max:20', Rule::unique('bahan', 'kode')],
             'nama' => ['required', 'string', 'max:100'],
             'kategori' => ['required', 'string', 'max:50'],
             'stok' => ['required', 'integer', 'min:0'],
             'satuan' => ['required', 'string', 'max:20'],
         ]);
+
+        $validated['kode'] = Bahan::generateKode();
 
         Bahan::create($validated);
 

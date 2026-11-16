@@ -3,10 +3,6 @@
 @section('title', 'Pengguna - MBG Smart Stock')
 
 @section('content')
-    @php
-        $roleList = $pengguna->pluck('role')->unique()->sort()->values();
-    @endphp
-
     @if (session('success'))
         <div class="mb-4 rounded-[10px] border border-[#B7E4CD] bg-[#EDF7F1] px-4 py-3 text-[12px] font-semibold text-[#257A59]">
             {{ session('success') }}
@@ -28,7 +24,7 @@
 
             <div class="flex items-center gap-3 max-[560px]:w-full">
                 <span class="inline-flex h-[32px] items-center rounded-full bg-[#EDF4FF] px-[14px] text-[12px] font-semibold whitespace-nowrap text-[#2D76D6]">
-                    {{ $pengguna->count() }} Akun
+                    {{ $pengguna->total() }} Akun
                 </span>
 
                 <button type="button" data-pengguna-tambah class="inline-flex h-[42px] items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2]">
@@ -177,13 +173,14 @@
                 </tbody>
             </table>
         </div>
+        @include('layouts.partials.pagination', ['paginator' => $pengguna])
     </section>
 
     {{-- Modal Tambah --}}
     <div id="modal-pengguna-tambah" data-pengguna-modal class="fixed inset-0 z-50 hidden items-center justify-center bg-white/10 p-4 backdrop-blur-[3px]">
         <div class="w-full max-w-[606px] overflow-hidden rounded-[15px] bg-white shadow-[0_20px_60px_rgba(7,30,63,0.25)]">
             <div class="flex h-[50px] items-center justify-between bg-[#E5E7EB] px-[26px]">
-                <h2 class="font-poppins text-[18px] leading-[27px] font-bold text-[#1D1D1D]">Tambah Pengguna Baru</h2>
+                <h2 class="font-inter text-[18px] leading-[27px] font-bold text-[#1D1D1D]">Tambah Pengguna Baru</h2>
                 <button type="button" data-pengguna-modal-close aria-label="Tutup" class="cursor-pointer text-[#1D1D1D] transition-opacity hover:opacity-60">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                         <path d="M4 4L14 14M14 4L4 14" stroke="#1D1D1D" stroke-width="1.6" stroke-linecap="round"/>
@@ -191,7 +188,7 @@
                 </button>
             </div>
 
-            <form action="{{ route('pengguna.store') }}" method="POST" class="px-[26px] pt-[20px] pb-[28px] font-poppins">
+            <form action="{{ route('pengguna.store') }}" method="POST" class="px-[26px] pt-[20px] pb-[28px] font-inter">
                 @csrf
 
                 <div>
@@ -253,7 +250,7 @@
     <div id="modal-pengguna-edit" data-pengguna-modal class="fixed inset-0 z-50 hidden items-center justify-center bg-white/10 p-4 backdrop-blur-[3px]">
         <div class="w-full max-w-[606px] overflow-hidden rounded-[15px] bg-white shadow-[0_20px_60px_rgba(7,30,63,0.25)]">
             <div class="flex h-[50px] items-center justify-between bg-[#E5E7EB] px-[26px]">
-                <h2 class="font-poppins text-[18px] leading-[27px] font-bold text-[#1D1D1D]">Edit Pengguna</h2>
+                <h2 class="font-inter text-[18px] leading-[27px] font-bold text-[#1D1D1D]">Edit Pengguna</h2>
                 <button type="button" data-pengguna-modal-close aria-label="Tutup" class="cursor-pointer text-[#1D1D1D] transition-opacity hover:opacity-60">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                         <path d="M4 4L14 14M14 4L4 14" stroke="#1D1D1D" stroke-width="1.6" stroke-linecap="round"/>
@@ -261,7 +258,7 @@
                 </button>
             </div>
 
-            <form id="form-pengguna-edit" method="POST" data-action="{{ route('pengguna.update', '__ID__') }}" class="px-[26px] pt-[20px] pb-[28px] font-poppins">
+            <form id="form-pengguna-edit" method="POST" data-action="{{ route('pengguna.update', '__ID__') }}" class="px-[26px] pt-[20px] pb-[28px] font-inter">
                 @csrf
                 @method('PUT')
 
