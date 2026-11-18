@@ -4,6 +4,7 @@
 
 @section('content')
     @php
+        $canManage = auth()->user()->canManageInventory();
         $stokMinimum = \App\Models\Bahan::STOCK_MINIMUM;
     @endphp
 
@@ -45,13 +46,15 @@
                 </p>
             </div>
 
-            <button type="button" data-modal-open class="inline-flex h-[42px] items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2] max-[560px]:w-full">
-                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M5 12h14"></path>
-                    <path d="M12 5v14"></path>
-                </svg>
-                Tambah Bahan
-            </button>
+            @if ($canManage)
+                <button type="button" data-modal-open class="inline-flex h-[42px] items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2] max-[560px]:w-full">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                    </svg>
+                    Tambah Bahan
+                </button>
+            @endif
         </div>
 
         {{-- Search & filter --}}
@@ -92,7 +95,9 @@
                         <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-left text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Satuan</th>
                         <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-right text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Stok Minimum</th>
                         <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Status</th>
-                        <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Aksi</th>
+                        @if ($canManage)
+                            <th class="h-[47px] whitespace-nowrap bg-[#F8FAFC] px-5 text-center text-[12px] font-bold tracking-[0.02em] text-[#627087] uppercase">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
 
@@ -115,34 +120,36 @@
                                 </span>
                             </td>
                             <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
-                                <div class="flex items-center justify-center gap-[9px]">
-                                    <button type="button" data-modal-edit data-kode="{{ $item->kode }}" data-nama="{{ $item->nama }}" data-kategori="{{ $item->kategori }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}" title="Edit {{ $item->nama }}" aria-label="Edit {{ $item->nama }}" class="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-[8px] bg-[#EDF4FF] text-[#2D76D6] transition-transform hover:-translate-y-px" >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
-                                            <path d="m15 5 4 4"></path>
-                                        </svg>
-                                    </button>
-
-                                    <form method="POST" action="{{ route('bahan.destroy', $item->kode) }}" onsubmit="return confirm('Hapus bahan pangan ini?')" class="shrink-0">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit" title="Hapus {{ $item->nama }}" aria-label="Hapus {{ $item->nama }}" class="grid h-[34px] w-[34px] place-items-center rounded-[8px] bg-[#FFF0F0] text-[#D94E4E] transition-transform hover:-translate-y-px">
+                                @if ($canManage)
+                                    <div class="flex items-center justify-center gap-[9px]">
+                                        <button type="button" data-modal-edit data-kode="{{ $item->kode }}" data-nama="{{ $item->nama }}" data-kategori="{{ $item->kategori }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}" title="Edit {{ $item->nama }}" aria-label="Edit {{ $item->nama }}" class="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-[8px] bg-[#EDF4FF] text-[#2D76D6] transition-transform hover:-translate-y-px" >
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M10 11v6"></path>
-                                                <path d="M14 11v6"></path>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
-                                                <path d="M3 6h18"></path>
-                                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+                                                <path d="m15 5 4 4"></path>
                                             </svg>
                                         </button>
-                                    </form>
-                                </div>
-                            </td>
+
+                                        <form method="POST" action="{{ route('bahan.destroy', $item->kode) }}" onsubmit="return confirm('Hapus bahan pangan ini?')" class="shrink-0">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" title="Hapus {{ $item->nama }}" aria-label="Hapus {{ $item->nama }}" class="grid h-[34px] w-[34px] place-items-center rounded-[8px] bg-[#FFF0F0] text-[#D94E4E] transition-transform hover:-translate-y-px">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M10 11v6"></path>
+                                                    <path d="M14 11v6"></path>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                             @endif
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="h-[220px] border-t border-[#D9E1EB] px-5 text-center">
+                            <td colspan="{{ $canManage ? 8 : 7 }}" class="h-[220px] border-t border-[#D9E1EB] px-5 text-center">
                                 <div class="grid min-h-[220px] place-items-center text-[#98A4B4]">
                                     <div>
                                         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="mx-auto" aria-hidden="true">
@@ -161,7 +168,7 @@
 
                     @if ($bahan->isNotEmpty())
                         <tr id="bahan-filter-empty" class="hidden">
-                            <td colspan="8" class="h-[220px] border-t border-[#D9E1EB] px-5 text-center">
+                            <td colspan="{{ $canManage ? 8 : 7 }}" class="h-[220px] border-t border-[#D9E1EB] px-5 text-center">
                                 <div class="grid min-h-[220px] place-items-center text-[#98A4B4]">
                                     <div>
                                         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="mx-auto" aria-hidden="true">
@@ -183,7 +190,7 @@
 
     {{-- Tambah Bahan Pangan --}}
     <div id="modal-tambah" data-modal data-open-on-error="{{ $errors->any() && old('_modal') === 'tambah' ? 'true' : 'false' }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-white/10 p-4 backdrop-blur-[3px]">
-        <div class="w-full max-w-[606px] overflow-hidden rounded-[15px] bg-white shadow-[0_20px_60px_rgba(7,30,63,0.25)]">
+        {{-- <div class="w-full max-w-[606px] overflow-hidden rounded-[15px] bg-white shadow-[0_20px_60px_rgba(7,30,63,0.25)]">
 
             {{-- Header Modal --}}
             <div class="flex h-[50px] items-center justify-between bg-[#E5E7EB] px-[26px]">

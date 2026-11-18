@@ -10,8 +10,82 @@
         $statusAman = $statusKetersediaan === 'Aman';
     @endphp
 
+    @php
+        $quickRanges = [
+            'Hari Ini' => [now()->toDateString(), now()->toDateString()],
+            '7 Hari Terakhir' => [now()->subDays(6)->toDateString(), now()->toDateString()],
+            'Bulan Ini' => [now()->startOfMonth()->toDateString(), now()->toDateString()],
+        ];
+    @endphp
+    
+    {{-- filter laporan --}}
+    <section class="mt-6 rounded-[15px] border border-[#D9E1EB] bg-white p-5 shadow-[0_2px_5px_rgba(28,47,74,0.03)]">
+        <div class="mb-4 flex flex-wrap items-center gap-2">
+            <span class="text-[12px] font-semibold text-[#6D7B90]">Rekap Laporan</span>
+            @foreach ($quickRanges as $label => [$quickDari, $quickSampai])
+                <a href="{{ route('laporan.index', array_filter([
+                'dari' => $quickDari,
+                'sampai'=> $quickSampai,
+                'kategori' => $kategori,
+                ])) }}"
+                class="inline-flex h-[32px] items-center rounded-full border px-3 text-[11px] font-semibold transition-colors {{ $dari === $quickDari && $sampai === $quickSampai ? 'border-[#397BD8] bg-[#EDF4FF] text-[#2D76D6]' : 'border-[#D9E1EB] bg-white text-[#485A70] hover:bg-[#F7F9FC]'}}">{{ $label }}</a>
+            @endforeach
+        </div>
+        <form action="{{ route('laporan.index') }}" method="GET" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end">
+
+            <div>
+                <label for="dari" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                    Dari Tanggal
+                </label>
+
+                <input type="date" id="dari" name="dari" value="{{ old('dari', $dari) }}" class="h-[43px] w-full rounded-[9px] border border-[#D9E1EB] px-3 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
+                @error('dari')
+                    <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="sampai" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                    Sampai Tanggal
+                </label>
+
+                <input type="date" id="sampai" name="sampai" value="{{ old('sampai', $sampai) }}" class="h-[43px] w-full rounded-[9px] border border-[#D9E1EB] px-3 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]" >
+                @error('sampai')
+                    <p class="mt-[4px] text-[12px] text-[#D94E4E]">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="kategori" class="mb-[7px] block text-[12px] font-semibold text-[#485A70]">
+                    Kategori
+                </label>
+
+                <select name="kategori" id="kategori" class="h-[43px] w-full appearance-none rounded-[9px] border border-[#D9E1EB] border border-[#D9E1EB] bg-white px-3 text-[12px] text-[#182230] outline-none transition-colors focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)]">
+                    <option value="">Semua Kategori</option>
+                    @foreach ($kategoriList as $itemKategori)
+                        <option value="{{ $itemKategori }}" @selected(old('kategori', $kategori) === $itemKategori)>{{ $itemKategori }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex gap-2">
+                <button type="submit" class="inline-flex h-[43px] flex-1 items-center justify-center rounded-[9px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)]">
+                    Terapkan
+                </button>
+
+                <a href="{{ route('laporan.index') }}" class="inline-flex h-[43px] items-center justify-center rounded-[9px] border border-[#D9E1EB] bg-white px-4 text-[12px] font-semibold whitespace-nowrap text-[#485A70] transition-colors hover:bg-[#F7F9FC]">
+                    Reset
+                </a>
+            </div>
+        </form>
+
+        <p class="mt-3 text-[11px] text-[#6D7B90]">
+            Menampilkan periode {{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}
+        </p>
+    </section>
+
     {{-- Ringkasan --}}
-    <div class="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
+    <div class="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
         <article class="flex items-center justify-between rounded-[15px] border border-[#D9E1EB] bg-white p-5 shadow-[0_2px_5px_rgba(28,47,74,0.03)]">
             <div class="min-w-0">
                 <p class="text-[10px] font-semibold tracking-[0.02em] text-[#6D7B90] uppercase">Total Jenis Barang</p>
@@ -93,7 +167,7 @@
                 </p>
             </div>
 
-            <a href="{{ route('laporan.export') }}" class="inline-flex h-[42px] items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2] max-[560px]:w-full">
+            <a href="{{ route('laporan.export', request()->only('dari', 'sampai', 'kategori')) }}" class="inline-flex h-[42px] items-center justify-center gap-2 rounded-[10px] bg-[#397BD8] px-4 text-[12px] font-semibold whitespace-nowrap text-white shadow-[0_4px_9px_rgba(45,105,190,0.22)] transition-all hover:-translate-y-px hover:bg-[#2869C2] max-[560px]:w-full">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M12 3v12"></path>
                     <path d="m7 10 5 5 5-5"></path>

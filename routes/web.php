@@ -29,6 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/stok-opname', [StokOpnameController::class, 'store'])->name('stok-opname.store');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
+    Route::middleware('manage-inventory')->group (function () {
+        Route::post('/bahan-pangan', [BahanController::class, 'store'])->name('bahan.store');
+        Route::put('/bahan-pangan/{kode}', [BahanController::class, 'update'])->name('bahan.update');
+        Route::delete('/bahan-pangan/{kode}', [BahanController::class, 'destroy'])->name('bahan.destroy');
+        Route::post('/barang-masuk', [BarangMasukController::class, 'store'])->name('barang-masuk.store');
+        Route::delete('/barang-keluar', [BarangKeluarController::class, 'store'])->name('barang-keluar.store');
+        Route::delete('/stok-opname', [StokOpnameController::class, 'store'])->name('stok-opname.store');
+
+    });
     Route::middleware('admin')->group (function () {
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
         Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');

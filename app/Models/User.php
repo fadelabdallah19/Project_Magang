@@ -14,7 +14,6 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -36,4 +35,8 @@ class User extends Authenticatable
         return $this->role === 'Admin';
     }
 
+    public function canManageInventory(): bool
+    {
+        return in_array($this->role, ['Admin', 'Petugas Gudang'], true);
+    }
 }
