@@ -50,5 +50,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->name('logout');
 
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check()
+    ? redirect()->route('login')
+    : redirect()->route('dashboard');
 });

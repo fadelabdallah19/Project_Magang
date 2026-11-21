@@ -125,7 +125,7 @@
                         </div>
 
                         <div class="flex flex-nowrap items-center gap-[8px]">
-                            <button type="button" data-demo-username="admin_mbg" data-demo-password="password" title="Isi otomatis akun Admin" class="inline-flex h-[32px] shrink-0 items-center gap-[6px] rounded-full border border-[#DCE4EE] bg-white px-[9px] text-[10px] font-semibold whitespace-nowrap text-[#334155] transition-colors hover:border-[#1677E8] hover:text-[#1677E8] focus:ring-2 focus:ring-[#1677E8]/20 focus:outline-none">
+                            <button type="button" data-demo-username="admin_mbg" data-demo-password="password" title="Isi otomatis akun Admin" class="inline-flex h-[30px] shrink-0 items-center gap-[5px] rounded-full border border-[#DCE4EE] bg-white px-[9px] text-[10px] font-semibold whitespace-nowrap text-[#334155] transition-colors hover:border-[#1677E8] hover:text-[#1677E8] focus:ring-2 focus:ring-[#1677E8]/20 focus:outline-none sm:h-[32px] sm:px-[12px] sm:text-[11px]">
                                 <span class="justify-center rounded-full"></span>
                                 Admin
                             </button>
