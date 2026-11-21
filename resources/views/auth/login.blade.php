@@ -26,10 +26,10 @@
             <section class="flex flex-col justify-between bg-[#142B46] px-[28px] pt-[28px] pb-[32px] lg:px-[40px] lg:pt-[40px] lg:pb-[104px]">
 
                 {{-- logo --}}
-                <div class="flex items-center gap-[14px]">
+                <div class="flex items-center justify-center gap-[14px]">
                     <div class="min-w-0">
-                        <p class="text-[22px] leading-[26px] font-bold text-white sm:text-[24px] sm:leading-[28px]">MBG Smart Stock</p>
-                        <p class="mt-[3px] text-[13px] leading-[17px] text-[#A9B6C6] sm:text-[14px] sm:leading-[18px]">Stok Pangan Terintegrasi</p>
+                        <p class="text-[28px] leading-[26px] font-bold text-white sm:text-[24px] sm:leading-[28px]">MBG Smart Stock</p>
+                        <p class="mt-[3px] text-[20px] leading-[17px] text-center text-[#A9B6C6] sm:text-[14px] sm:leading-[18px]">Stok Pangan Terintegrasi</p>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@
 
                 {{-- copyright --}}
                 <div class="mt-[40px] lg:mt-0">
-                    <h1 class="mt-[18px] max-w-[290px] text-[28px] leading-[34px] font-bold text-white lg:text-[30px]" >Kelola stok pangan dengan lebih pasti</h1>
+                    <h1 class="mt-[18px] max-w-[290px] text-center text-[28px] leading-[34px] font-bold text-white lg:text-[30px]" >Kelola stok pangan dengan lebih pasti</h1>
                 </div>
             </section>
 

@@ -119,8 +119,8 @@
                                     {{ $stokRendahItem ? 'Stok Rendah' : 'Aman' }}
                                 </span>
                             </td>
-                            <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
-                                @if ($canManage)
+                            @if ($canManage)
+                                <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-[12px] whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-[9px]">
                                         <button type="button" data-modal-edit data-kode="{{ $item->kode }}" data-nama="{{ $item->nama }}" data-kategori="{{ $item->kategori }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}" title="Edit {{ $item->nama }}" aria-label="Edit {{ $item->nama }}" class="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-[8px] bg-[#EDF4FF] text-[#2D76D6] transition-transform hover:-translate-y-px" >
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
