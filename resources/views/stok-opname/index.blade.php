@@ -94,7 +94,7 @@
 
                             @if ($canManage)
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5">
-                                    <input type="number" name="stok_fisik" min="0" required form="opname-form-{{ $i }}" placeholder="{{ $item->stok }}" data-stok-fisik data-row="{{ $i }}" data-sistem="{{ $item->stok }}" aria-label="Stok fisik {{ $item->nama }}" class="h-[43px] w-[120px] rounded-[9px] border border-[#D9E1EB] px-3 text-center text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] readolny">
+                                    <input type="number" name="stok_fisik" min="0" required form="opname-form-{{ $i }}" placeholder="{{ $item->stok }}" data-stok-fisik data-row="{{ $i }}" data-sistem="{{ $item->stok }}" aria-label="Stok fisik {{ $item->nama }}" class="h-[43px] w-[120px] rounded-[9px] border border-[#D9E1EB] px-3 text-center text-[12px] text-[#182230] outline-none transition-colors placeholder:text-[#9BA6B6] focus:border-[#86AFE6] focus:shadow-[0_0_0_3px_rgba(57,123,216,0.09)] readonly">
                                 </td>
 
                                 <td class="h-[68px] border-t border-[#D9E1EB] px-5 text-center text-[12px] whitespace-nowrap">

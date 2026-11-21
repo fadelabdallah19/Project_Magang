@@ -190,7 +190,7 @@
 
     {{-- Tambah Bahan Pangan --}}
     <div id="modal-tambah" data-modal data-open-on-error="{{ $errors->any() && old('_modal') === 'tambah' ? 'true' : 'false' }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-white/10 p-4 backdrop-blur-[3px]">
-        {{-- <div class="w-full max-w-[606px] overflow-hidden rounded-[15px] bg-white shadow-[0_20px_60px_rgba(7,30,63,0.25)]">
+        <div class="w-full max-w-[606px] overflow-hidden rounded-[15px] bg-white shadow-[0_20px_60px_rgba(7,30,63,0.25)]">
 
             {{-- Header Modal --}}
             <div class="flex h-[50px] items-center justify-between bg-[#E5E7EB] px-[26px]">
@@ -228,7 +228,7 @@
                         Nama Bahan Pangan
                     </label>
 
-                    <input type="text" id="nama" name="nama" type="text" value="{{ old('nama') }}" placeholder="Contoh: Beras / Minyak Sayur" class="h-[34px] w-full rounded-[8px] border px-[13px] text-[13px] text-[#1D1D1D] outline-none transtition-colors placeholder:text-[#9CA3AF] focus:border-[#0088FF] {{ $errors->has('nama') ? 'border-[#E11D48]' : 'border-[#E5E7EB]' }}">
+                    <input type="text" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Contoh: Beras / Minyak Sayur" class="h-[34px] w-full rounded-[8px] border px-[13px] text-[13px] text-[#1D1D1D] outline-none transition-colors placeholder:text-[#9CA3AF] focus:border-[#0088FF] {{ $errors->has('nama') ? 'border-[#E11D48]' : 'border-[#E5E7EB]' }}">
                     @error('nama')
                         <p class="mt-[4px] text-[11px] text-[#9CA3AF]">{{ $message }}</p>
                     @enderror
